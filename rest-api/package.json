@@ -1,0 +1,20 @@
+{
+  "name": "nature-destinations-api",
+  "version": "1.0.0",
+  "description": "A RESTful API built with vanilla Node.js providing curated data on world-famous natural wonders and landmarks.",
+  "license": "ISC",
+  "author": "Anatoliy Pavlenko",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "node",
+    "vanilla-js",
+    "api",
+    "json",
+    "nature"
+  ]
+}
