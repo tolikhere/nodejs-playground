@@ -20,6 +20,15 @@ const server = http.createServer(async (req, res) => {
         (destination) => destination.continent.toLowerCase() === continent,
       ),
     );
+  } else if (req.method === "GET" && req.url.startsWith("/api/country")) {
+    const country = segments.pop().toLowerCase();
+    sendJSON(
+      res,
+      200,
+      destinations.filter(
+        (destination) => destination.country.toLowerCase() === country,
+      ),
+    );
   } else {
     sendJSON(res, 404, {
       error: "not found",
