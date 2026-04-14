@@ -2,6 +2,7 @@ import http from "node:http";
 import { getDataFromDB } from "./database/db.js";
 import { sendJSON } from "./utils/sendJSON.js";
 import { filterByUrlSlug } from "./utils/filterByUrlSlug.js";
+import { filterByQueryParams } from "./utils/filterByQueryParams.js";
 
 const PORT = 3000;
 
@@ -9,9 +10,10 @@ const server = http.createServer(async (req, res) => {
   const destinations = await getDataFromDB();
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   const { pathname } = urlObj;
+  const queryObj = Object.fromEntries(urlObj.searchParams);
 
   if (req.method === "GET" && pathname === "/api") {
-    sendJSON(res, 200, destinations);
+    sendJSON(res, 200, filterByQueryParams(destinations, queryObj));
   } else if (req.method === "GET" && pathname.startsWith("/api/continent/")) {
     sendJSON(res, 200, filterByUrlSlug(destinations, "continent", pathname));
   } else if (req.method === "GET" && pathname.startsWith("/api/country/")) {
