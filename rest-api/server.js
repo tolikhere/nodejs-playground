@@ -21,10 +21,14 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && pathname === "/api") {
     const destinations = await getDataFromDB();
     return sendJSON(res, 200, filterByQueryParams(destinations, queryObj));
-  } else if (req.method === "GET" && pathname.startsWith("/api/continent/")) {
+  }
+  
+  if (req.method === "GET" && pathname.startsWith("/api/continent/")) {
     const destinations = await getDataFromDB();
     return sendJSON(res, 200, filterByUrlSlug(destinations, "continent", pathname));
-  } else if (req.method === "GET" && pathname.startsWith("/api/country/")) {
+  }
+  
+  if (req.method === "GET" && pathname.startsWith("/api/country/")) {
     const destinations = await getDataFromDB();
     return sendJSON(res, 200, filterByUrlSlug(destinations, "country", pathname));
   }
