@@ -7,23 +7,32 @@ import { filterByQueryParams } from "./utils/filterByQueryParams.js";
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
-  const destinations = await getDataFromDB();
+  if (!req.url.startsWith("/api")) {
+    return sendJSON(res, 404, {
+      error: "not found",
+      message: "The requested route does not exist",
+    });
+  }
+
   const urlObj = new URL(req.url, `http://${req.headers.host}`);
   const { pathname } = urlObj;
   const queryObj = Object.fromEntries(urlObj.searchParams);
 
   if (req.method === "GET" && pathname === "/api") {
-    sendJSON(res, 200, filterByQueryParams(destinations, queryObj));
+    const destinations = await getDataFromDB();
+    return sendJSON(res, 200, filterByQueryParams(destinations, queryObj));
   } else if (req.method === "GET" && pathname.startsWith("/api/continent/")) {
-    sendJSON(res, 200, filterByUrlSlug(destinations, "continent", pathname));
+    const destinations = await getDataFromDB();
+    return sendJSON(res, 200, filterByUrlSlug(destinations, "continent", pathname));
   } else if (req.method === "GET" && pathname.startsWith("/api/country/")) {
-    sendJSON(res, 200, filterByUrlSlug(destinations, "country", pathname));
-  } else {
-    sendJSON(res, 404, {
-      error: "not found",
-      message: "The requested route does not exist",
-    });
+    const destinations = await getDataFromDB();
+    return sendJSON(res, 200, filterByUrlSlug(destinations, "country", pathname));
   }
+
+  return sendJSON(res, 404, {
+    error: "not found",
+    message: "The requested route does not exist",
+  });
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
