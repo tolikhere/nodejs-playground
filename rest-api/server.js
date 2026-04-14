@@ -7,13 +7,15 @@ const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
   const destinations = await getDataFromDB();
+  const urlObj = new URL(req.url, `http://${req.headers.host}`);
+  const { pathname } = urlObj;
 
-  if (req.method === "GET" && req.url === "/api") {
+  if (req.method === "GET" && pathname === "/api") {
     sendJSON(res, 200, destinations);
-  } else if (req.method === "GET" && req.url.startsWith("/api/continent/")) {
-    sendJSON(res, 200, filterByUrlSlug(req, destinations, "continent"));
-  } else if (req.method === "GET" && req.url.startsWith("/api/country/")) {
-    sendJSON(res, 200, filterByUrlSlug(req, destinations, "country"));
+  } else if (req.method === "GET" && pathname.startsWith("/api/continent/")) {
+    sendJSON(res, 200, filterByUrlSlug(destinations, "continent", pathname));
+  } else if (req.method === "GET" && pathname.startsWith("/api/country/")) {
+    sendJSON(res, 200, filterByUrlSlug(destinations, "country", pathname));
   } else {
     sendJSON(res, 404, {
       error: "not found",

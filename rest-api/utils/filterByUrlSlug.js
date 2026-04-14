@@ -1,5 +1,4 @@
-export const filterByUrlSlug = (req, collection, fieldName) => {
-  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
+export const filterByUrlSlug = (collection, fieldName, pathname) => {
   const slug = pathname.split("/").filter(Boolean).pop()?.toLowerCase();
 
   if (!slug) return [];
