@@ -5,7 +5,7 @@ export const filterByQueryParams = (collection, params) => {
 
   return collection.filter((item) =>
     keys.every((key) =>
-      key in item && item[key] != null
+      key in item && item[key] != null // null/undefined checks for collection items
         ? String(item[key]).toLowerCase() === String(params[key]).toLowerCase()
         : false,
     ),
